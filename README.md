@@ -1,4 +1,4 @@
-# 🔍 Everything Search — Complete Mastery Guide
+# <img width="32" height="32" alt="image" src="https://github.com/user-attachments/assets/282f4fda-b42b-49a4-823b-a5f9691730a3" /> Everything Search — Complete Mastery Guide
 
 > **The fastest file search on Windows, fully unlocked.**
 > Sub-second results across millions of files. Boolean logic, regex, date/size filters, duplicate detection, network access, and CLI automation — all in one free tool.
@@ -10,7 +10,6 @@
 
 ---
 
-<img width="512" height="512" alt="image" src="https://github.com/user-attachments/assets/282f4fda-b42b-49a4-823b-a5f9691730a3" />
 
 
 ## 📖 Table of Contents
