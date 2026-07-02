@@ -11,17 +11,25 @@ duplicate detection, network access, and CLI automation — all in one free tool
 [![Everything Version](https://img.shields.io/badge/Everything-1.4.1%2B-blue?style=flat-square)](https://www.voidtools.com/)
 [![Platform](https://img.shields.io/badge/platform-Windows-lightgrey?style=flat-square)]()
 [![License](https://img.shields.io/badge/license-Freeware-green?style=flat-square)](https://www.voidtools.com/)
-[![Interactive Guide](https://img.shields.io/badge/🎓%20interactive%20guide-open%20slides-orange?style=flat-square)](https://htmlpreview.github.io/?https://github.com/Olexify/GuideFor---Everything_SearchEngine/blob/main/everything-search-mastery-guide.html)
+
+<br/>
+
+### 🎓 Interactive Slide Deck
+
+<a href="https://htmlpreview.github.io/?https://github.com/Olexify/GuideFor---Everything_SearchEngine/blob/main/everything-search-mastery-guide.html">
+  <img src="https://img.shields.io/badge/▶%20%20OPEN%20INTERACTIVE%20SLIDES-Click%20Here%20to%20Launch-FF6B35?style=for-the-badge&logo=html5&logoColor=white" alt="Open Interactive Slides" height="50"/>
+</a>
+
+<br/><br/>
+
+> 💡 The HTML file shows *"Error loading page"* inside GitHub — that's normal.
+> Use the button above to open the actual interactive presentation.
+
+<br/>
 
 <img width="100%" alt="preview" src="https://github.com/user-attachments/assets/a8bc8cef-c5c0-42ef-97f9-46c509b206f0" />
 
 </div>
-
-[![Everything Version](https://img.shields.io/badge/Everything-1.4.1%2B-blue?style=flat-square)](https://www.voidtools.com/)
-[![Platform](https://img.shields.io/badge/platform-Windows-lightgrey?style=flat-square)]()
-[![License](https://img.shields.io/badge/license-Freeware-green?style=flat-square)](https://www.voidtools.com/)
-[![Guide](https://img.shields.io/badge/interactive%20guide-HTML%20slides-orange?style=flat-square)]()
-
 ---
 
 
