@@ -1,7 +1,7 @@
-# <img width="32" height="32" alt="image" src="https://github.com/user-attachments/assets/282f4fda-b42b-49a4-823b-a5f9691730a3" /> Everything Search — Complete Mastery Guide
+# <img width="32" height="32" alt="image" src="https://github.com/user-attachments/assets/282f4fda-b42b-49a4-823b-a5f9691730a3" /> Everything Search - Complete Mastery Guide
 
 > **The fastest file search on Windows, fully unlocked.**
-> Sub-second results across millions of files. Boolean logic, regex, date/size filters, duplicate detection, network access, and CLI automation — all in one free tool.
+> Sub-second results across millions of files. Boolean logic, regex, date/size filters, duplicate detection, network access, and CLI automation - all in one free tool.
 
 [![Everything Version](https://img.shields.io/badge/Everything-1.4.1%2B-blue?style=flat-square)](https://www.voidtools.com/)
 [![Platform](https://img.shields.io/badge/platform-Windows-lightgrey?style=flat-square)]()
@@ -33,7 +33,7 @@
 
 ## ⚡ Why Everything?
 
-Everything indexes the **Windows MFT (Master File Table)** directly — the same low-level index the OS itself uses — instead of crawling files like Windows Search does.
+Everything indexes the **Windows MFT (Master File Table)** directly - the same low-level index the OS itself uses - instead of crawling files like Windows Search does.
 
 | Feature | Everything | Windows Search |
 |---|---|---|
@@ -75,7 +75,7 @@ Everything indexes the **Windows MFT (Master File Table)** directly — the same
 
 ## 🔣 Boolean Operators
 
-Everything uses a simple inline syntax — no special mode needed.
+Everything uses a simple inline syntax - no special mode needed.
 
 | Operator | Symbol | Meaning | Example |
 |---|---|---|---|
@@ -122,7 +122,7 @@ Everything uses a simple inline syntax — no special mode needed.
 ```
 path:UE_5.8 case:regex:Windows.*Engine\.ini
 ```
-*Case-sensitive regex inside a path filter — finds your `.ini` files precisely across all drives.*
+*Case-sensitive regex inside a path filter - finds your `.ini` files precisely across all drives.*
 
 ---
 
@@ -216,7 +216,7 @@ size:>500mb !.tmp dm:thismonth
 ```
 attrib:H !attrib:S image:
 ```
-*Hidden image files that are NOT system files — finds secret photos.*
+*Hidden image files that are NOT system files - finds secret photos.*
 
 ---
 
@@ -271,13 +271,13 @@ content:"api_key" *.env              → Find .env files containing "api_key"
 utf8content:"TODO" *.ts              → UTF-8 encoded TypeScript files with TODO comments
 ```
 
-> ⚠️ **Performance Note:** `content:` reads every matched file from disk — very slow on large drives.
+> ⚠️ **Performance Note:** `content:` reads every matched file from disk - very slow on large drives.
 > **Always combine with a path or type filter:**
 > ```
 > path:D:\Projects content:"TODO"
 > ```
 
-### Regex on Filenames (instant — no disk scan)
+### Regex on Filenames (instant - no disk scan)
 
 ```
 regex:^(2025|2026).*\.pdf$          → PDFs starting with 2025 or 2026
@@ -353,12 +353,12 @@ Enable at **Tools → Options → HTTP Server**. Default port: 80.
 http://192.168.x.x:80
 ```
 
-Access Everything from any browser on your LAN — phone, tablet, other PCs. Supports full search + file download links. No client app required.
+Access Everything from any browser on your LAN - phone, tablet, other PCs. Supports full search + file download links. No client app required.
 
 > 🔐 **Security:** Always set username/password in Options. Never expose the port to the internet without authentication.
 
 ### ETP Protocol (PC-to-PC)
-**Everything Transport Protocol** — TCP-based, lets another PC running Everything connect to your full index.
+**Everything Transport Protocol** - TCP-based, lets another PC running Everything connect to your full index.
 
 - Server: **Tools → Options → ETP/FTP Server**
 - Client: **Tools → Connect to ETP Server**
@@ -376,7 +376,7 @@ Requires read permission on the share. Everything will index those paths alongsi
 
 ## 🚀 Power Search Recipes
 
-Real queries for real workflows — copy, paste, adapt.
+Real queries for real workflows - copy, paste, adapt.
 
 ```bash
 # 🎮 UE5 .ini Files Across All Drives
@@ -426,7 +426,7 @@ zip: size:>200mb !dm:last30days
 
 ## 🎓 Interactive Presentation
 
-This guide is also available as a **self-contained interactive HTML slide deck** — dark/light theme toggle, smooth animations, keyboard navigation.
+This guide is also available as a **self-contained interactive HTML slide deck** - dark/light theme toggle, smooth animations, keyboard navigation.
 
 ```
 everything-search-mastery.slides.html
@@ -434,7 +434,7 @@ everything-search-mastery.slides.html
 
 - Navigate with **← →** arrow keys or swipe on mobile
 - Toggle **☀️ / 🌙** for light and dark themes
-- Works fully offline — single HTML file, zero dependencies
+- Works fully offline - single HTML file, zero dependencies
 
 ---
 
