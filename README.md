@@ -20,7 +20,7 @@ duplicate detection, network access, and CLI automation - all in one free tool.
 
 <br/>
 
-<img width="100%" alt="preview" src="https://github.com/user-attachments/assets/a8bc8cef-c5c0-42ef-97f9-46c509b206f0" />
+<img width="100%" alt="preview" src="https://github.com/user-attachments/assets/ee859f17-4053-40bf-861d-243ec67927ba" />
 
 ### 🎓 Interactive Slide Deck
 
@@ -30,6 +30,7 @@ duplicate detection, network access, and CLI automation - all in one free tool.
 <br/>
 
 </div>
+
 
 ---
 
