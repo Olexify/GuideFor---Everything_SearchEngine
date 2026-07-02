@@ -14,13 +14,6 @@ duplicate detection, network access, and CLI automation — all in one free tool
 
 <br/>
 
-### 🎓 Interactive Slide Deck
-
-<a href="https://htmlpreview.github.io/?https://github.com/Olexify/GuideFor---Everything_SearchEngine/blob/main/everything-search-mastery-guide.html">
-  <img src="https://img.shields.io/badge/▶%20%20OPEN%20INTERACTIVE%20SLIDES-Click%20Here%20to%20Launch-FF6B35?style=for-the-badge&logo=html5&logoColor=white" alt="Open Interactive Slides" height="50"/>
-</a>
-
-<br/><br/>
 
 > 💡 The HTML file shows *"Error loading page"* inside GitHub — that's normal.
 > Use the button above to open the actual interactive presentation.
@@ -29,7 +22,16 @@ duplicate detection, network access, and CLI automation — all in one free tool
 
 <img width="100%" alt="preview" src="https://github.com/user-attachments/assets/a8bc8cef-c5c0-42ef-97f9-46c509b206f0" />
 
+### 🎓 Interactive Slide Deck
+
+<a href="https://htmlpreview.github.io/?https://github.com/Olexify/GuideFor---Everything_SearchEngine/blob/main/everything-search-mastery-guide.html">
+  <img src="https://img.shields.io/badge/▶%20%20OPEN%20INTERACTIVE%20SLIDES-Click%20Here%20to%20Launch-FF6B35?style=for-the-badge&logo=html5&logoColor=white" alt="Open Interactive Slides" height="50"/>
+</a>
+
+<br/><br/>
+
 </div>
+
 ---
 
 
