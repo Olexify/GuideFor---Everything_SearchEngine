@@ -1,6 +1,6 @@
 <div align="center">
 
-<img width="80" height="80" alt="Everything Search icon" src="https://github.com/user-attachments/assets/282f4fda-b42b-49a4-823b-a5f9691730a3" />
+<img width="80" height="80" alt="Everything Search icon" src="https://github.com/user-attachments/assets/d094d347-c144-4116-9850-7a818a8cf16e" />
 
 # Everything Search - Complete Mastery Guide
 
