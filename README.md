@@ -10,6 +10,9 @@
 
 ---
 
+<img width="512" height="512" alt="image" src="https://github.com/user-attachments/assets/282f4fda-b42b-49a4-823b-a5f9691730a3" />
+
+
 ## 📖 Table of Contents
 
 1. [Why Everything?](#-why-everything)
