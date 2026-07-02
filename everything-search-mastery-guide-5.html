@@ -35,13 +35,15 @@
         }
         *, *::before, *::after { box-sizing: border-box; }
         html { margin: 0; padding: 0; background: var(--color-bg); overflow: hidden; height: 100%; }
+        /* Defense against iframe host CSS injection resetting text-align */
+        .content.text-center-force, .content[style*="text-align:center"] { text-align: center !important; }
         body { font-family: 'DM Sans', sans-serif; color: var(--color-text); background: var(--color-bg); margin: 0; padding: 0; overflow: hidden; height: 100%; width: 100%; transition: background 0.4s; }
         .deck { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
 
         /* ── Slides ── */
         .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transform: scale(0.95); transition: opacity 0.7s ease, transform 0.7s ease; pointer-events: none; overflow: hidden; }
         .slide.active { opacity: 1; transform: scale(1); pointer-events: all; }
-        .slide > .content { position: relative; z-index: 2; width: 100%; max-width: 1100px; padding: clamp(1.5rem, 4vw, 3.5rem); }
+        .slide > .content { position: relative; z-index: 2; width: 100%; max-width: 1100px; padding: clamp(1.5rem, 4vw, 3.5rem); margin-left: auto; margin-right: auto; }
 
         /* ── Elegant invisible scroll on content-heavy slides ── */
         .slide-scrollable { justify-content: flex-start !important; padding-top: clamp(1rem, 3vh, 2rem); }
@@ -256,10 +258,10 @@
         <div class="blob" style="width:340px;height:340px;bottom:-80px;left:-60px;background:#7c4dff;opacity:0.055;"></div>
         <div class="blob" style="width:220px;height:220px;top:38%;left:16%;background:#00b686;opacity:0.045;"></div>
     </div>
-    <div class="content text-center">
+    <div class="content" style="text-align:center !important;">
         <div style="display:flex;justify-content:center;margin-bottom:1.2rem;"><img src="https://raw.githubusercontent.com/Olexify/GuideFor---Everything_SearchEngine/main/2023-07-07-ts3_thumbs-17a.webp" alt="Everything Search icon" style="width:96px;height:96px;object-fit:contain;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 0 32px rgba(0,229,255,0.4));border-radius:16px;"></div>
-        <h1 class="font-display reveal" style="font-size:clamp(2.6rem,6vw,4.6rem);font-weight:800;background:linear-gradient(135deg,#00e5ff,#7c4dff,#00b686);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-0.02em;margin:0 0 0.9rem;">Everything Search</h1>
-        <p class="reveal" style="font-size:clamp(0.85rem,1.6vw,1.2rem);color:#5a6380;letter-spacing:0.18em;text-transform:uppercase;font-weight:400;margin:0 0 2rem;">Complete Mastery · 16 Techniques</p>
+        <h1 class="font-display reveal" style="font-size:clamp(2.6rem,6vw,4.6rem);font-weight:800;background:linear-gradient(135deg,#00e5ff,#7c4dff,#00b686);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-0.02em;margin:0 0 0.9rem;text-align:center !important;">Everything Search</h1>
+        <p class="reveal" style="font-size:clamp(0.85rem,1.6vw,1.2rem);color:#5a6380;letter-spacing:0.18em;text-transform:uppercase;font-weight:400;margin:0 0 2rem;text-align:center !important;">Complete Mastery · 16 Techniques</p>
         <div class="reveal" style="display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;width:100%;">
             <div style="background:rgba(0,229,255,0.07);border:1px solid rgba(0,229,255,0.18);border-radius:10px;padding:0.55rem 1.2rem;font-size:0.8rem;color:#5a6380;font-family:'JetBrains Mono',monospace;">
                 <span style="color:#00e5ff;font-weight:700;">⚡</span> Sub-second MFT indexing
@@ -818,10 +820,10 @@
         <div class="blob" style="width:340px;height:340px;bottom:-80px;left:-60px;background:#7c4dff;opacity:0.06;"></div>
         <div class="blob" style="width:200px;height:200px;top:40%;left:15%;background:#00b686;opacity:0.05;"></div>
     </div>
-    <div class="content text-center">
+    <div class="content" style="text-align:center !important;">
         <div style="font-size:72px;animation:float 3s ease-in-out infinite;margin-bottom:1.2rem;filter:drop-shadow(0 0 24px rgba(0,229,255,0.4));">⚡</div>
-        <h2 class="font-display reveal" style="font-size:clamp(2rem,4vw,3.2rem);font-weight:800;background:linear-gradient(135deg,#00e5ff,#7c4dff,#00b686);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:0 0 0.8rem;">You're Now a Power User</h2>
-        <p class="reveal" style="font-size:0.9rem;color:#5a6380;letter-spacing:0.14em;text-transform:uppercase;font-weight:400;margin:0 0 2rem;">16 Techniques · Instant Recall</p>
+        <h2 class="font-display reveal" style="font-size:clamp(2rem,4vw,3.2rem);font-weight:800;background:linear-gradient(135deg,#00e5ff,#7c4dff,#00b686);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:0 0 0.8rem;text-align:center !important;">You're Now a Power User</h2>
+        <p class="reveal" style="font-size:0.9rem;color:#5a6380;letter-spacing:0.14em;text-transform:uppercase;font-weight:400;margin:0 0 2rem;text-align:center !important;">16 Techniques · Instant Recall</p>
         <div class="reveal" style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem;text-align:left;max-width:900px;margin:0 auto;">
             <div class="glass-card ac1" style="padding:0.8rem;"><div style="font-size:0.68rem;font-weight:700;color:#00e5ff;font-family:'JetBrains Mono',monospace;">Boolean</div><div style="font-size:0.72rem;color:#5a6380;margin-top:0.2rem;">SPACE | ! &lt;&gt; " "</div></div>
             <div class="glass-card ac1" style="padding:0.8rem;"><div style="font-size:0.68rem;font-weight:700;color:#00e5ff;font-family:'JetBrains Mono',monospace;">Wildcards</div><div style="font-size:0.72rem;color:#5a6380;margin-top:0.2rem;">* ? ** path: wfn:</div></div>
