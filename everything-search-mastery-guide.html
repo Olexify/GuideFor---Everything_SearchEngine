@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="slides-format" content="viewport">
+    <title>Everything Search — Complete Mastery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;0,800;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        @theme {
+            --color-bg: #0a0c10;
+            --color-bg-deep: #05070d;
+            --color-surface: #111520;
+            --color-text: #e8eaf6;
+            --color-text-secondary: #b0b8d4;
+            --color-text-muted: #5a6380;
+            --color-accent-1: #00e5ff;
+            --color-accent-2: #7c4dff;
+            --color-accent-3: #00b686;
+            --color-glass-bg: rgba(255,255,255,0.04);
+            --color-glass-border: rgba(255,255,255,0.08);
+            --color-vignette: rgba(0,0,0,0.55);
+            --font-display: 'JetBrains Mono', monospace;
+            --font-body: 'DM Sans', sans-serif;
+        }
+    </style>
+    <style>
+        :root {
+            --color-bg: #0a0c10;
+            --color-text: #e8eaf6;
+            --glow-color-rgb: 0,229,255;
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body { background: var(--color-bg); margin: 0; transition: background 0.4s; }
+        body { font-family: 'DM Sans', sans-serif; color: var(--color-text); overflow: hidden; height: 100vh; width: 100vw; }
+        .deck { width: 100vw; height: 100vh; position: relative; z-index: 1; }
+
+        /* ── Slides ── */
+        .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transform: scale(0.95); transition: opacity 0.7s ease, transform 0.7s ease; pointer-events: none; overflow: hidden; }
+        .slide.active { opacity: 1; transform: scale(1); pointer-events: all; }
+        .slide > .content { position: relative; z-index: 2; width: 100%; max-width: 1100px; padding: clamp(1.5rem, 4vw, 3.5rem); }
+
+        /* ── Elegant invisible scroll on content-heavy slides ── */
+        .slide-scrollable > .content {
+            overflow-y: auto;
+            max-height: 88vh;
+            padding-bottom: 5rem;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0,229,255,0.08) transparent;
+            -webkit-mask-image: linear-gradient(to bottom, black 82%, transparent 100%);
+            mask-image: linear-gradient(to bottom, black 82%, transparent 100%);
+        }
+        .slide-scrollable > .content::-webkit-scrollbar { width: 3px; }
+        .slide-scrollable > .content::-webkit-scrollbar-track { background: transparent; }
+        .slide-scrollable > .content::-webkit-scrollbar-thumb { background: rgba(0,229,255,0.07); border-radius: 10px; }
+        .slide-scrollable > .content:hover::-webkit-scrollbar-thumb { background: rgba(0,229,255,0.22); }
+
+        /* ── Nav ── */
+        .nav-controls { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 14px; z-index: 100; background: rgba(255,255,255,0.04); backdrop-filter: blur(12px); padding: 8px 20px; border-radius: 40px; border: 1px solid rgba(255,255,255,0.08); }
+        .nav-btn { width: 36px; height: 36px; border: none; background: rgba(255,255,255,0.05); color: #00e5ff; border-radius: 50%; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+        .nav-btn:hover { background: rgba(0,229,255,0.16); }
+        .slide-dots { display: flex; gap: 7px; }
+        .slide-dots .dot { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,0.14); cursor: pointer; transition: background 0.3s, transform 0.3s; }
+        .slide-dots .dot.active { background: #00e5ff; transform: scale(1.3); }
+        .slide-counter { font-size: 0.75rem; color: #5a6380; min-width: 36px; text-align: center; }
+
+        /* ── Reveal ── */
+        .reveal { opacity: 0; transform: translateY(20px); }
+
+        /* ── Blob animations ── */
+        @keyframes float-slow { 0%{transform:translate(0,0) scale(1);}25%{transform:translate(60px,-50px) scale(1.12);}50%{transform:translate(-40px,40px) scale(0.9);}75%{transform:translate(50px,20px) scale(1.08);}100%{transform:translate(0,0) scale(1);} }
+        @keyframes float-drift { 0%{transform:translate(0,0) scale(1) rotate(0deg);}33%{transform:translate(-50px,-60px) scale(1.15) rotate(3deg);}66%{transform:translate(40px,30px) scale(0.88) rotate(-2deg);}100%{transform:translate(0,0) scale(1) rotate(0deg);} }
+        @keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);} }
+        @keyframes glow-pulse { 0%,100%{text-shadow:0 0 20px rgba(0,229,255,0.5),0 0 40px rgba(0,229,255,0.2);}50%{text-shadow:0 0 30px rgba(0,229,255,0.8),0 0 60px rgba(0,229,255,0.3);} }
+        @keyframes scanline { 0%{background-position:0 0;}100%{background-position:0 100vh;} }
+
+        .gradient-mesh { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(110px); animation: float-slow 22s ease-in-out infinite; }
+        .blob:nth-child(2) { animation: float-drift 30s ease-in-out infinite; }
+        .blob:nth-child(3) { animation: float-slow 38s ease-in-out infinite reverse; }
+
+        /* ── Depth: noise + vignette ── */
+        .slide::before { content:''; position:absolute; inset:0; z-index:1; pointer-events:none; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); background-repeat:repeat; background-size:256px 256px; opacity:0.04; mix-blend-mode:overlay; }
+        .slide::after { content:''; position:absolute; inset:0; z-index:1; pointer-events:none; background:radial-gradient(ellipse at center,transparent 50%,var(--color-vignette) 100%); }
+
+        /* ── Scanline overlay on title ── */
+        .scanlines::before { background-image: repeating-linear-gradient(0deg, rgba(0,229,255,0.012) 0px, transparent 1px, transparent 3px); background-size: 100% 4px; animation: scanline 8s linear infinite; }
+
+        /* ── Glow ── */
+        .glow-pulse { animation: glow-pulse 3s ease-in-out infinite; }
+        .stat-glow { text-shadow: 0 0 30px rgba(0,229,255,0.6), 0 0 60px rgba(0,229,255,0.25); }
+        .text-glow { text-shadow: 0 0 20px rgba(0,229,255,0.5), 0 0 40px rgba(0,229,255,0.2); }
+
+        /* ── Cards ── */
+        .glass-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 13px; padding: 1.1rem 1.3rem; transition: transform 0.25s, box-shadow 0.25s; }
+        .glass-card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(0,229,255,0.14); }
+        .ac1 { border-left: 3px solid #00e5ff; padding-left: 0.9rem; }
+        .ac2 { border-left: 3px solid #7c4dff; padding-left: 0.9rem; }
+        .ac3 { border-left: 3px solid #00b686; padding-left: 0.9rem; }
+        .ac-red { border-left: 3px solid #ff4d6d; padding-left: 0.9rem; }
+        .ac-amber { border-left: 3px solid #ffb300; padding-left: 0.9rem; }
+
+        /* ── Code pill ── */
+        .cpill { display: inline-block; background: rgba(0,229,255,0.07); border: 1px solid rgba(0,229,255,0.2); border-radius: 6px; padding: 1px 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: #00e5ff; letter-spacing: 0.01em; }
+        .cpill-v { background: rgba(124,77,255,0.1); border-color: rgba(124,77,255,0.3); color: #b388ff; }
+        .cpill-g { background: rgba(0,182,134,0.1); border-color: rgba(0,182,134,0.3); color: #69ffda; }
+        .cpill-r { background: rgba(255,77,109,0.1); border-color: rgba(255,77,109,0.3); color: #ff8fa3; }
+        .cpill-a { background: rgba(255,179,0,0.1); border-color: rgba(255,179,0,0.3); color: #ffd740; }
+
+        /* ── Table ── */
+        .tbl { width: 100%; border-collapse: collapse; font-size: clamp(0.68rem, 1.1vw, 0.82rem); }
+        .tbl th { background: transparent; color: #00e5ff; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.7rem; padding: 0.5rem 0.7rem; border-bottom: 2px solid rgba(0,229,255,0.3); text-align: left; }
+        .tbl td { padding: 0.45rem 0.7rem; border-bottom: 1px solid rgba(255,255,255,0.05); color: #b0b8d4; vertical-align: top; }
+        .tbl tr:last-child td { border-bottom: none; }
+        .tbl tr:hover td { background: rgba(0,229,255,0.02); }
+
+        /* ── Bars ── */
+        .bar-track { background: rgba(255,255,255,0.07); border-radius: 99px; height: 7px; overflow: hidden; }
+        .bar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #00e5ff, #7c4dff); width: 0%; transition: width 0.9s ease; }
+
+        /* ═══════════════════════════════════════
+           LIGHT MODE — Coastal/Lab palette
+        ═══════════════════════════════════════ */
+        body.light-mode {
+            --color-bg: #f0f4ff;
+            --color-bg-deep: #e6ecff;
+            --color-surface: #ffffff;
+            --color-text: #0d1530;
+            --color-text-secondary: #1e2a50;
+            --color-text-muted: #4a5580;
+            --color-glass-bg: rgba(255,255,255,0.92);
+            --color-glass-border: rgba(0,150,200,0.25);
+            --color-vignette: rgba(0,100,200,0.04);
+        }
+        body.light-mode .slide { background: transparent; }
+        body.light-mode .slide::after {
+            background: radial-gradient(ellipse at 70% 20%, rgba(0,150,220,0.07) 0%, transparent 60%),
+                        radial-gradient(ellipse at 20% 80%, rgba(124,77,255,0.05) 0%, transparent 55%);
+        }
+
+        /* Light: gradient headings */
+        body.light-mode h1.font-display { -webkit-text-fill-color: transparent !important; }
+        body.light-mode h2[style*="#00e5ff"][style*="background-clip:text"] {
+            background: linear-gradient(135deg,#0077b6,#0096c7) !important;
+            -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; background-clip: text !important;
+        }
+        body.light-mode h2[style*="#7c4dff"][style*="background-clip:text"] {
+            background: linear-gradient(135deg,#5e35b1,#4527a0) !important;
+            -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; background-clip: text !important;
+        }
+        body.light-mode h2[style*="#00b686"][style*="background-clip:text"] {
+            background: linear-gradient(135deg,#00796b,#00695c) !important;
+            -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; background-clip: text !important;
+        }
+        body.light-mode h2[style*="#ff4d6d"][style*="background-clip:text"] {
+            background: linear-gradient(135deg,#c62828,#b71c1c) !important;
+            -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important; background-clip: text !important;
+        }
+        /* Light: inline color remaps */
+        body.light-mode [style*="color:#5a6380"] { color: #4a5580 !important; }
+        body.light-mode [style*="color:#b0b8d4"] { color: #1e2a50 !important; }
+        body.light-mode [style*="color:#e8eaf6"] { color: #0d1530 !important; }
+        body.light-mode [style*="color:#00e5ff"] { color: #0077b6 !important; }
+        body.light-mode [style*="color:#7c4dff"] { color: #5e35b1 !important; }
+        body.light-mode [style*="color:#00b686"] { color: #00796b !important; }
+        body.light-mode [style*="color:#b388ff"] { color: #5e35b1 !important; }
+        body.light-mode [style*="color:#69ffda"] { color: #00796b !important; }
+        body.light-mode [style*="color:#ffd740"] { color: #b45309 !important; }
+        body.light-mode [style*="color:#ff8fa3"] { color: #b91c1c !important; }
+        body.light-mode [style*="color:#94a3b8"] { color: #4a5580 !important; }
+
+        /* Light: cards */
+        body.light-mode .glass-card {
+            background: #ffffff !important;
+            border: 1px solid rgba(0,150,200,0.2) !important;
+            border-top: 3px solid rgba(0,150,200,0.4) !important;
+            box-shadow: 0 4px 16px rgba(0,100,200,0.08), 0 1px 4px rgba(0,0,0,0.04) !important;
+        }
+        body.light-mode .glass-card:hover { box-shadow: 0 8px 28px rgba(0,100,200,0.16) !important; border-top-color: rgba(0,150,200,0.75) !important; }
+        body.light-mode .ac1 { border-left: 4px solid #0077b6 !important; border-top: none !important; }
+        body.light-mode .ac2 { border-left: 4px solid #5e35b1 !important; border-top: none !important; }
+        body.light-mode .ac3 { border-left: 4px solid #00796b !important; border-top: none !important; }
+        body.light-mode .ac-red  { border-left: 4px solid #c62828 !important; border-top: none !important; }
+        body.light-mode .ac-amber{ border-left: 4px solid #b45309 !important; border-top: none !important; }
+
+        /* Light: code pills */
+        body.light-mode .cpill { background: rgba(0,119,182,0.1) !important; border-color: rgba(0,119,182,0.35) !important; color: #0077b6 !important; }
+        body.light-mode .cpill-v { background: rgba(94,53,177,0.1) !important; border-color: rgba(94,53,177,0.35) !important; color: #5e35b1 !important; }
+        body.light-mode .cpill-g { background: rgba(0,121,107,0.1) !important; border-color: rgba(0,121,107,0.35) !important; color: #00796b !important; }
+        body.light-mode .cpill-r { background: rgba(198,40,40,0.1) !important; border-color: rgba(198,40,40,0.35) !important; color: #c62828 !important; }
+        body.light-mode .cpill-a { background: rgba(180,83,9,0.1) !important; border-color: rgba(180,83,9,0.35) !important; color: #b45309 !important; }
+
+        /* Light: table */
+        body.light-mode .tbl th { color: #0077b6 !important; border-bottom-color: rgba(0,119,182,0.4) !important; }
+        body.light-mode .tbl td { color: #1e2a50 !important; border-bottom-color: rgba(0,119,182,0.08) !important; }
+        body.light-mode .tbl tr:hover td { background: rgba(0,119,182,0.04) !important; }
+
+        /* Light: bars */
+        body.light-mode .bar-track { background: rgba(0,119,182,0.12) !important; }
+        body.light-mode .bar-fill  { background: linear-gradient(90deg, #0077b6, #5e35b1) !important; }
+        body.light-mode .stat-glow { text-shadow: 0 0 16px rgba(0,119,182,0.35) !important; }
+
+        /* Light: nav */
+        body.light-mode .nav-controls { background: rgba(255,255,255,0.94) !important; border-color: rgba(0,150,200,0.3) !important; box-shadow: 0 4px 20px rgba(0,100,200,0.1) !important; }
+        body.light-mode .nav-btn { background: rgba(0,150,200,0.1) !important; color: #0077b6 !important; }
+        body.light-mode .nav-btn:hover { background: rgba(0,150,200,0.2) !important; }
+        body.light-mode .slide-dots .dot { background: rgba(0,150,200,0.25) !important; }
+        body.light-mode .slide-dots .dot.active { background: #0077b6 !important; }
+        body.light-mode .slide-counter { color: #4a5580 !important; }
+
+        /* Light: toggle btn */
+        body.light-mode #theme-toggle { background: rgba(0,150,200,0.1) !important; border-color: rgba(0,150,200,0.35) !important; color: #0077b6 !important; }
+
+        /* Light: scrollbar */
+        body.light-mode .slide-scrollable > .content { scrollbar-color: rgba(0,150,200,0.15) transparent !important; }
+        body.light-mode .slide-scrollable > .content::-webkit-scrollbar-thumb { background: rgba(0,150,200,0.1) !important; }
+        body.light-mode .slide-scrollable > .content:hover::-webkit-scrollbar-thumb { background: rgba(0,150,200,0.35) !important; }
+
+        /* Light: blobs subtle */
+        body.light-mode .blob { opacity: 0.05 !important; filter: blur(90px); }
+
+        /* Light: inline bg boxes */
+        body.light-mode [style*="background:rgba(255,255,255,0.04)"],
+        body.light-mode [style*="background:rgba(255,255,255,0.05)"],
+        body.light-mode [style*="background:rgba(255,255,255,0.06)"] { background: #ffffff !important; border-color: rgba(0,150,200,0.2) !important; }
+        body.light-mode [style*="background:rgba(0,229,255,0.07)"],
+        body.light-mode [style*="background:rgba(0,229,255,0.08)"] { background: rgba(0,150,200,0.1) !important; border-color: rgba(0,150,200,0.3) !important; }
+        body.light-mode [style*="background:rgba(124,77,255,0.07)"],
+        body.light-mode [style*="background:rgba(124,77,255,0.08)"] { background: rgba(94,53,177,0.1) !important; border-color: rgba(94,53,177,0.3) !important; }
+        body.light-mode [style*="background:rgba(0,182,134,0.07)"],
+        body.light-mode [style*="background:rgba(0,182,134,0.08)"] { background: rgba(0,121,107,0.1) !important; border-color: rgba(0,121,107,0.3) !important; }
+
+        @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration:0.01ms !important; transition-duration:0.2s !important; } }
+    </style>
+</head>
+<body class="light-mode">
+
+<button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode"
+    style="position:fixed;top:18px;right:22px;z-index:200;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.11);color:#00e5ff;border-radius:50px;padding:7px 14px;font-size:1rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;backdrop-filter:blur(12px);transition:background 0.3s,color 0.3s;">
+    <span id="theme-icon">🌙</span>
+</button>
+
+<div class="mouse-spotlight" style="position:fixed;inset:0;z-index:99;pointer-events:none;"></div>
+<div id="mouse-aura" style="position:fixed;inset:0;z-index:0;pointer-events:none;transition:background .05s;"></div>
+
+<div class="deck">
+
+<!-- ═══════════════════════════════════════ SLIDE 1 — TITLE ═══════════════════════════════════════ -->
+<div class="slide scanlines active" data-slide="1">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:500px;height:500px;top:-120px;right:-100px;background:#00e5ff;opacity:0.06;"></div>
+        <div class="blob" style="width:340px;height:340px;bottom:-80px;left:-60px;background:#7c4dff;opacity:0.055;"></div>
+        <div class="blob" style="width:220px;height:220px;top:38%;left:16%;background:#00b686;opacity:0.045;"></div>
+    </div>
+    <div class="content text-center">
+        <div style="font-size:90px;animation:float 3s ease-in-out infinite;margin-bottom:1.2rem;filter:drop-shadow(0 0 32px rgba(0,229,255,0.4));">🔍</div>
+        <h1 class="font-display reveal" style="font-size:clamp(2.6rem,6vw,4.6rem);font-weight:800;background:linear-gradient(135deg,#00e5ff,#7c4dff,#00b686);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-0.02em;margin:0 0 0.9rem;">Everything Search</h1>
+        <p class="reveal" style="font-size:clamp(0.85rem,1.6vw,1.2rem);color:#5a6380;letter-spacing:0.18em;text-transform:uppercase;font-weight:400;margin:0 0 2rem;">Complete Mastery · 16 Techniques</p>
+        <div class="reveal" style="display:inline-flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;">
+            <div style="background:rgba(0,229,255,0.07);border:1px solid rgba(0,229,255,0.18);border-radius:10px;padding:0.55rem 1.2rem;font-size:0.8rem;color:#5a6380;font-family:'JetBrains Mono',monospace;">
+                <span style="color:#00e5ff;font-weight:700;">⚡</span> Sub-second MFT indexing
+            </div>
+            <div style="background:rgba(124,77,255,0.07);border:1px solid rgba(124,77,255,0.18);border-radius:10px;padding:0.55rem 1.2rem;font-size:0.8rem;color:#5a6380;font-family:'JetBrains Mono',monospace;">
+                <span style="color:#7c4dff;font-weight:700;">🧠</span> Boolean · Regex · Wildcards
+            </div>
+            <div style="background:rgba(0,182,134,0.07);border:1px solid rgba(0,182,134,0.18);border-radius:10px;padding:0.55rem 1.2rem;font-size:0.8rem;color:#5a6380;font-family:'JetBrains Mono',monospace;">
+                <span style="color:#00b686;font-weight:700;">🌐</span> HTTP Server · CLI · ETP
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════ SLIDE 2 — WHY EVERYTHING ═══════════════════════════════════════ -->
+<div class="slide" data-slide="2">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:380px;height:380px;top:-90px;right:-80px;background:#00e5ff;opacity:0.044;"></div>
+        <div class="blob" style="width:260px;height:260px;bottom:-60px;left:-40px;background:#7c4dff;opacity:0.033;"></div>
+    </div>
+    <div class="content">
+        <p class="reveal" style="font-size:0.72rem;color:#00e5ff;text-transform:uppercase;letter-spacing:0.14em;font-weight:600;margin-bottom:0.4rem;font-family:'JetBrains Mono',monospace;">01 · Foundation</p>
+        <h2 class="font-display reveal" style="font-size:clamp(1.9rem,4vw,2.9rem);font-weight:700;margin:0 0 1.8rem;background:linear-gradient(135deg,#00e5ff,#22eeff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Why Everything?</h2>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+            <div class="glass-card ac1 reveal">
+                <div style="font-size:1.4rem;margin-bottom:0.35rem;">⚡</div>
+                <div style="font-weight:600;color:#e8eaf6;font-size:0.86rem;margin-bottom:0.2rem;">Instant Indexing</div>
+                <div style="font-size:0.77rem;color:#5a6380;">Reads NTFS MFT directly — indexes 1M+ files in under 1 second. Windows Search takes minutes.</div>
+            </div>
+            <div class="glass-card ac2 reveal">
+                <div style="font-size:1.4rem;margin-bottom:0.35rem;">🧠</div>
+                <div style="font-weight:600;color:#e8eaf6;font-size:0.86rem;margin-bottom:0.2rem;">6 MB RAM Only</div>
+                <div style="font-size:0.77rem;color:#5a6380;">Entire app uses ~6 MB RAM vs Windows Search consuming 200–800 MB. Stays resident in background.</div>
+            </div>
+            <div class="glass-card ac3 reveal">
+                <div style="font-size:1.4rem;margin-bottom:0.35rem;">🔎</div>
+                <div style="font-weight:600;color:#e8eaf6;font-size:0.86rem;margin-bottom:0.2rem;">Real-time Results</div>
+                <div style="font-size:0.77rem;color:#5a6380;">Results appear as you type — zero delay. Type 3 chars and see every match across all drives instantly.</div>
+            </div>
+            <div class="glass-card ac-amber reveal">
+                <div style="font-size:1.4rem;margin-bottom:0.35rem;">🌐</div>
+                <div style="font-weight:600;color:#e8eaf6;font-size:0.86rem;margin-bottom:0.2rem;">Network + Remote</div>
+                <div style="font-size:0.77rem;color:#5a6380;">Built-in HTTP server, ETP protocol for cross-PC search. Serve your file index to any browser or phone.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════ SLIDE 3 — INTERFACE & HOTKEYS ═══════════════════════════════════════ -->
+<div class="slide slide-scrollable" data-slide="3">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:360px;height:360px;top:-80px;right:-70px;background:#7c4dff;opacity:0.044;"></div>
+        <div class="blob" style="width:240px;height:240px;bottom:-50px;left:-40px;background:#00e5ff;opacity:0.033;"></div>
+    </div>
+    <div class="content">
+        <p class="reveal" style="font-size:0.72rem;color:#7c4dff;text-transform:uppercase;letter-spacing:0.14em;font-weight:600;margin-bottom:0.4rem;font-family:'JetBrains Mono',monospace;">02 · Interface</p>
+        <h2 class="font-display reveal" style="font-size:clamp(1.8rem,3.6vw,2.7rem);font-weight:700;margin:0 0 1.5rem;background:linear-gradient(135deg,#7c4dff,#b388ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Shortcuts & Interface</h2>
+        <table class="tbl reveal">
+            <thead><tr><th>Shortcut</th><th>Action</th><th>Context</th></tr></thead>
+            <tbody>
+                <tr><td><span class="cpill">Ctrl+F</span></td><td style="color:#e8eaf6;">Focus search box</td><td>Global hotkey (configurable)</td></tr>
+                <tr><td><span class="cpill">Ctrl+T</span></td><td style="color:#e8eaf6;">New search tab</td><td>Multiple independent searches</td></tr>
+                <tr><td><span class="cpill">Alt+Home</span></td><td style="color:#e8eaf6;">Clear search / go home</td><td>Reset current tab</td></tr>
+                <tr><td><span class="cpill">F3</span></td><td style="color:#e8eaf6;">Focus results list</td><td>Navigate results with arrows</td></tr>
+                <tr><td><span class="cpill">Ctrl+Enter</span></td><td style="color:#e8eaf6;">Open containing folder</td><td>Selected result</td></tr>
+                <tr><td><span class="cpill">Ctrl+C</span></td><td style="color:#e8eaf6;">Copy full path to clipboard</td><td>Selected file</td></tr>
+                <tr><td><span class="cpill">Ctrl+1…5</span></td><td style="color:#e8eaf6;">Sort by Name/Path/Size/Ext/Date</td><td>Results column</td></tr>
+                <tr><td><span class="cpill">Ctrl+Shift+C</span></td><td style="color:#e8eaf6;">Copy name only (no path)</td><td>Selected result</td></tr>
+                <tr><td><span class="cpill">Ctrl+,</span></td><td style="color:#e8eaf6;">Open Options / Settings</td><td>App-level</td></tr>
+                <tr><td><span class="cpill">F5</span></td><td style="color:#e8eaf6;">Force re-index</td><td>After external drive mount</td></tr>
+                <tr><td><span class="cpill">Right-click</span></td><td style="color:#e8eaf6;">Full Explorer context menu</td><td>Results list</td></tr>
+            </tbody>
+        </table>
+        <div class="glass-card ac1 reveal" style="margin-top:1rem;">
+            <div style="font-size:0.72rem;color:#00e5ff;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">💡 Column Tips</div>
+            <div style="font-size:0.78rem;color:#b0b8d4;">Right-click any column header to add <strong style="color:#e8eaf6;">Date Created, Date Accessed, Attributes, Path</strong>. Drag columns to reorder. Click header to toggle sort direction.</div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════ SLIDE 4 — BOOLEAN ═══════════════════════════════════════ -->
+<div class="slide slide-scrollable" data-slide="4">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:370px;height:370px;top:-85px;right:-75px;background:#00e5ff;opacity:0.044;"></div>
+        <div class="blob" style="width:250px;height:250px;bottom:-55px;left:-45px;background:#00b686;opacity:0.033;"></div>
+    </div>
+    <div class="content">
+        <p class="reveal" style="font-size:0.72rem;color:#00e5ff;text-transform:uppercase;letter-spacing:0.14em;font-weight:600;margin-bottom:0.4rem;font-family:'JetBrains Mono',monospace;">03 · Operators</p>
+        <h2 class="font-display reveal" style="font-size:clamp(1.8rem,3.6vw,2.7rem);font-weight:700;margin:0 0 1.5rem;background:linear-gradient(135deg,#00e5ff,#22eeff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Boolean Operators</h2>
+        <div style="display:flex;flex-direction:column;gap:0.75rem;">
+            <div class="glass-card ac1 reveal">
+                <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;">
+                    <span class="cpill" style="min-width:3.5rem;text-align:center;">SPACE</span>
+                    <span style="font-size:0.78rem;color:#5a6380;">AND — both terms must appear</span>
+                    <span style="margin-left:auto;font-size:0.75rem;font-family:'JetBrains Mono',monospace;color:#7c4dff;">report 2026</span>
+                </div>
+            </div>
+            <div class="glass-card ac2 reveal">
+                <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;">
+                    <span class="cpill cpill-v" style="min-width:3.5rem;text-align:center;">|</span>
+                    <span style="font-size:0.78rem;color:#5a6380;">OR — either term matches</span>
+                    <span style="margin-left:auto;font-size:0.75rem;font-family:'JetBrains Mono',monospace;color:#7c4dff;">jpg | png</span>
+                </div>
+            </div>
+            <div class="glass-card ac-red reveal">
+                <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;">
+                    <span class="cpill cpill-r" style="min-width:3.5rem;text-align:center;">!</span>
+                    <span style="font-size:0.78rem;color:#5a6380;">NOT — exclude this term</span>
+                    <span style="margin-left:auto;font-size:0.75rem;font-family:'JetBrains Mono',monospace;color:#7c4dff;">report !backup</span>
+                </div>
+            </div>
+            <div class="glass-card ac3 reveal">
+                <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;">
+                    <span class="cpill cpill-g" style="min-width:3.5rem;text-align:center;">&lt; &gt;</span>
+                    <span style="font-size:0.78rem;color:#5a6380;">Group — combine complex logic</span>
+                    <span style="margin-left:auto;font-size:0.75rem;font-family:'JetBrains Mono',monospace;color:#7c4dff;">&lt;jpg | png&gt; 2026</span>
+                </div>
+            </div>
+            <div class="glass-card ac-amber reveal">
+                <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;">
+                    <span class="cpill cpill-a" style="min-width:3.5rem;text-align:center;">" "</span>
+                    <span style="font-size:0.78rem;color:#5a6380;">Exact phrase — whole string match</span>
+                    <span style="margin-left:auto;font-size:0.75rem;font-family:'JetBrains Mono',monospace;color:#7c4dff;">"meeting notes"</span>
+                </div>
+            </div>
+        </div>
+        <div class="glass-card ac1 reveal" style="margin-top:0.9rem;">
+            <div style="font-size:0.72rem;color:#00e5ff;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.25rem;">💡 Real Example</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:#b388ff;">&lt;jpg | png&gt; holiday 2025 !thumb</div>
+            <div style="font-size:0.74rem;color:#5a6380;margin-top:0.2rem;">Images from holiday 2025, excluding thumbnails</div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════ SLIDE 5 — WILDCARDS & MODIFIERS ═══════════════════════════════════════ -->
+<div class="slide slide-scrollable" data-slide="5">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:360px;height:360px;top:-80px;right:-70px;background:#00b686;opacity:0.044;"></div>
+        <div class="blob" style="width:240px;height:240px;bottom:-55px;left:-40px;background:#00e5ff;opacity:0.033;"></div>
+    </div>
+    <div class="content">
+        <p class="reveal" style="font-size:0.72rem;color:#00b686;text-transform:uppercase;letter-spacing:0.14em;font-weight:600;margin-bottom:0.4rem;font-family:'JetBrains Mono',monospace;">04 · Pattern Matching</p>
+        <h2 class="font-display reveal" style="font-size:clamp(1.8rem,3.6vw,2.7rem);font-weight:700;margin:0 0 1.5rem;background:linear-gradient(135deg,#00b686,#69ffda);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Wildcards & Modifiers</h2>
+        <table class="tbl reveal">
+            <thead><tr><th>Pattern / Modifier</th><th>Meaning</th><th>Example</th></tr></thead>
+            <tbody>
+                <tr><td><span class="cpill">*</span></td><td style="color:#e8eaf6;">Zero or more characters</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">*.ini</td></tr>
+                <tr><td><span class="cpill">?</span></td><td style="color:#e8eaf6;">Exactly one character</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">report_?.pdf</td></tr>
+                <tr><td><span class="cpill">**</span></td><td style="color:#e8eaf6;">Match path separator too (deep)</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">C:\**\config</td></tr>
+                <tr><td><span class="cpill cpill-v">case:</span></td><td style="color:#e8eaf6;">Case-sensitive matching</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">case:README</td></tr>
+                <tr><td><span class="cpill cpill-v">regex:</span></td><td style="color:#e8eaf6;">Full regular expression</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">regex:[0-9]{4}</td></tr>
+                <tr><td><span class="cpill cpill-v">path:</span></td><td style="color:#e8eaf6;">Match in full path (not just name)</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">path:Config *.ini</td></tr>
+                <tr><td><span class="cpill cpill-v">wfn:</span></td><td style="color:#e8eaf6;">Whole filename match only</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">wfn:setup.exe</td></tr>
+                <tr><td><span class="cpill cpill-v">wholeword:</span></td><td style="color:#e8eaf6;">Match whole word only</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">wholeword:log</td></tr>
+                <tr><td><span class="cpill cpill-g">nopath:</span></td><td style="color:#e8eaf6;">Disable path: prefix for this term</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">path:docs nopath:backup</td></tr>
+                <tr><td><span class="cpill cpill-g">file:</span> / <span class="cpill cpill-g">folder:</span></td><td style="color:#e8eaf6;">Restrict to files or folders only</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">folder:node_modules</td></tr>
+            </tbody>
+        </table>
+        <div class="glass-card ac3 reveal" style="margin-top:0.9rem;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:#00b686;">path:UE_5.8 case:regex:Windows.*Engine\.ini</div>
+            <div style="font-size:0.74rem;color:#5a6380;margin-top:0.2rem;">Case-sensitive regex inside a path filter — finds your .ini files precisely</div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════ SLIDE 6 — DATE FILTERS ═══════════════════════════════════════ -->
+<div class="slide slide-scrollable" data-slide="6">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:370px;height:370px;top:-85px;right:-75px;background:#7c4dff;opacity:0.044;"></div>
+        <div class="blob" style="width:250px;height:250px;bottom:-55px;left:-40px;background:#00e5ff;opacity:0.033;"></div>
+    </div>
+    <div class="content">
+        <p class="reveal" style="font-size:0.72rem;color:#7c4dff;text-transform:uppercase;letter-spacing:0.14em;font-weight:600;margin-bottom:0.4rem;font-family:'JetBrains Mono',monospace;">05 · Temporal Filters</p>
+        <h2 class="font-display reveal" style="font-size:clamp(1.8rem,3.6vw,2.7rem);font-weight:700;margin:0 0 1.5rem;background:linear-gradient(135deg,#7c4dff,#b388ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Date Filters</h2>
+        <table class="tbl reveal">
+            <thead><tr><th>Modifier</th><th>Filters by</th><th>Example</th></tr></thead>
+            <tbody>
+                <tr><td><span class="cpill">dm:</span></td><td style="color:#e8eaf6;">Date Modified</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">dm:today</td></tr>
+                <tr><td><span class="cpill">dc:</span></td><td style="color:#e8eaf6;">Date Created</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">dc:thisweek</td></tr>
+                <tr><td><span class="cpill">da:</span></td><td style="color:#e8eaf6;">Date Accessed</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">da:last7days</td></tr>
+                <tr><td><span class="cpill">dr:</span></td><td style="color:#e8eaf6;">Date Run (executables)</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">dr:thismonth</td></tr>
+            </tbody>
+        </table>
+        <p class="reveal" style="font-size:0.72rem;color:#7c4dff;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;margin:1rem 0 0.5rem;">Date Constants</p>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.6rem;" class="reveal">
+            <span class="cpill" style="text-align:center;padding:0.4rem;">today</span>
+            <span class="cpill" style="text-align:center;padding:0.4rem;">yesterday</span>
+            <span class="cpill" style="text-align:center;padding:0.4rem;">thisweek</span>
+            <span class="cpill" style="text-align:center;padding:0.4rem;">lastweek</span>
+            <span class="cpill" style="text-align:center;padding:0.4rem;">thismonth</span>
+            <span class="cpill" style="text-align:center;padding:0.4rem;">lastyear</span>
+            <span class="cpill" style="text-align:center;padding:0.4rem;">last7days</span>
+            <span class="cpill" style="text-align:center;padding:0.4rem;">last30days</span>
+            <span class="cpill" style="text-align:center;padding:0.4rem;">last365days</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.6rem;margin-top:0.9rem;">
+            <div class="glass-card ac2 reveal">
+                <div style="font-size:0.72rem;color:#b388ff;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.25rem;">📅 Explicit Date Range</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:#7c4dff;">dm:2026/06/01..2026/06/30 *.pdf</div>
+            </div>
+            <div class="glass-card ac1 reveal">
+                <div style="font-size:0.72rem;color:#00e5ff;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.25rem;">📅 Relative operators</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:#00e5ff;">dm:&gt;2025/01/01 .log</div>
+                <div style="font-size:0.74rem;color:#5a6380;margin-top:0.2rem;">All logs modified after Jan 1, 2025</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════ SLIDE 7 — SIZE FILTERS ═══════════════════════════════════════ -->
+<div class="slide slide-scrollable" data-slide="7">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:370px;height:370px;top:-85px;right:-75px;background:#00b686;opacity:0.044;"></div>
+        <div class="blob" style="width:250px;height:250px;bottom:-55px;left:-40px;background:#7c4dff;opacity:0.033;"></div>
+    </div>
+    <div class="content">
+        <p class="reveal" style="font-size:0.72rem;color:#00b686;text-transform:uppercase;letter-spacing:0.14em;font-weight:600;margin-bottom:0.4rem;font-family:'JetBrains Mono',monospace;">06 · Size Filters</p>
+        <h2 class="font-display reveal" style="font-size:clamp(1.8rem,3.6vw,2.7rem);font-weight:700;margin:0 0 1.5rem;background:linear-gradient(135deg,#00b686,#69ffda);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Size Filters</h2>
+        <table class="tbl reveal">
+            <thead><tr><th>Syntax</th><th>Meaning</th><th>Example</th></tr></thead>
+            <tbody>
+                <tr><td><span class="cpill">size:&gt;N</span></td><td style="color:#e8eaf6;">Larger than N bytes/kb/mb/gb</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">size:&gt;100mb</td></tr>
+                <tr><td><span class="cpill">size:&lt;N</span></td><td style="color:#e8eaf6;">Smaller than N</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">size:&lt;1kb</td></tr>
+                <tr><td><span class="cpill">size:A..B</span></td><td style="color:#e8eaf6;">Inclusive range</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">size:2mb..10mb</td></tr>
+                <tr><td><span class="cpill cpill-g">empty</span></td><td style="color:#e8eaf6;">Zero-byte files</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">size:empty *.log</td></tr>
+                <tr><td><span class="cpill cpill-g">tiny</span></td><td style="color:#e8eaf6;">1 byte – 10 KB</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">size:tiny</td></tr>
+                <tr><td><span class="cpill cpill-g">small</span></td><td style="color:#e8eaf6;">10 KB – 100 KB</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">size:small</td></tr>
+                <tr><td><span class="cpill cpill-g">medium</span></td><td style="color:#e8eaf6;">100 KB – 1 MB</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">size:medium</td></tr>
+                <tr><td><span class="cpill cpill-g">large</span></td><td style="color:#e8eaf6;">1 MB – 16 MB</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">size:large</td></tr>
+                <tr><td><span class="cpill cpill-g">huge</span></td><td style="color:#e8eaf6;">16 MB – 128 MB</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">size:huge</td></tr>
+                <tr><td><span class="cpill cpill-g">gigantic</span></td><td style="color:#e8eaf6;">128 MB +</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">size:gigantic</td></tr>
+            </tbody>
+        </table>
+        <div class="glass-card ac3 reveal" style="margin-top:0.9rem;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:#00b686;">size:&gt;500mb !.tmp dm:thismonth</div>
+            <div style="font-size:0.74rem;color:#5a6380;margin-top:0.2rem;">Large files created this month, excluding temp files</div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════ SLIDE 8 — TYPE MACROS & ATTRIBUTES ═══════════════════════════════════════ -->
+<div class="slide slide-scrollable" data-slide="8">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:370px;height:370px;top:-85px;right:-75px;background:#00e5ff;opacity:0.044;"></div>
+        <div class="blob" style="width:250px;height:250px;bottom:-55px;left:-40px;background:#00b686;opacity:0.033;"></div>
+    </div>
+    <div class="content">
+        <p class="reveal" style="font-size:0.72rem;color:#00e5ff;text-transform:uppercase;letter-spacing:0.14em;font-weight:600;margin-bottom:0.4rem;font-family:'JetBrains Mono',monospace;">07 · Type Macros</p>
+        <h2 class="font-display reveal" style="font-size:clamp(1.8rem,3.6vw,2.7rem);font-weight:700;margin:0 0 1.5rem;background:linear-gradient(135deg,#00e5ff,#22eeff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Type Macros & Attributes</h2>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;" class="reveal">
+            <div class="glass-card ac1">
+                <div style="font-size:0.7rem;color:#00e5ff;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem;">Type Macros</div>
+                <div style="display:flex;flex-direction:column;gap:0.3rem;font-family:'JetBrains Mono',monospace;font-size:0.78rem;">
+                    <div><span class="cpill">audio:</span> <span style="color:#5a6380;">mp3,flac,wav,ogg…</span></div>
+                    <div><span class="cpill">video:</span> <span style="color:#5a6380;">mp4,mkv,avi,mov…</span></div>
+                    <div><span class="cpill">image:</span> <span style="color:#5a6380;">jpg,png,gif,bmp…</span></div>
+                    <div><span class="cpill">doc:</span>   <span style="color:#5a6380;">docx,pdf,txt,md…</span></div>
+                    <div><span class="cpill">exe:</span>   <span style="color:#5a6380;">exe,msi,bat,cmd</span></div>
+                    <div><span class="cpill">zip:</span>   <span style="color:#5a6380;">zip,rar,7z,tar,gz</span></div>
+                    <div><span class="cpill cpill-v">font:</span>  <span style="color:#5a6380;">ttf,otf,woff…</span></div>
+                    <div><span class="cpill cpill-v">ext:</span>  <span style="color:#5a6380;">explicitly lists all extensions</span></div>
+                </div>
+            </div>
+            <div class="glass-card ac2">
+                <div style="font-size:0.7rem;color:#7c4dff;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.5rem;">File Attributes</div>
+                <div style="display:flex;flex-direction:column;gap:0.3rem;font-family:'JetBrains Mono',monospace;font-size:0.78rem;">
+                    <div><span class="cpill cpill-v">attrib:H</span> <span style="color:#5a6380;">Hidden files</span></div>
+                    <div><span class="cpill cpill-v">attrib:S</span> <span style="color:#5a6380;">System files</span></div>
+                    <div><span class="cpill cpill-v">attrib:R</span> <span style="color:#5a6380;">Read-only files</span></div>
+                    <div><span class="cpill cpill-v">attrib:E</span> <span style="color:#5a6380;">Encrypted files</span></div>
+                    <div><span class="cpill cpill-v">attrib:C</span> <span style="color:#5a6380;">Compressed</span></div>
+                    <div><span class="cpill cpill-g">attrib:HSR</span> <span style="color:#5a6380;">Combine flags</span></div>
+                    <div><span class="cpill cpill-g">runasadmin:</span> <span style="color:#5a6380;">Requires elevation</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="glass-card ac-amber reveal" style="margin-top:0.8rem;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:#ffd740;">attrib:H !attrib:S image:</div>
+            <div style="font-size:0.74rem;color:#5a6380;margin-top:0.2rem;">Hidden image files that aren't system files</div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════ SLIDE 9 — ADVANCED FUNCTIONS ═══════════════════════════════════════ -->
+<div class="slide slide-scrollable" data-slide="9">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:370px;height:370px;top:-85px;right:-75px;background:#7c4dff;opacity:0.044;"></div>
+        <div class="blob" style="width:250px;height:250px;bottom:-55px;left:-40px;background:#00b686;opacity:0.033;"></div>
+    </div>
+    <div class="content">
+        <p class="reveal" style="font-size:0.72rem;color:#7c4dff;text-transform:uppercase;letter-spacing:0.14em;font-weight:600;margin-bottom:0.4rem;font-family:'JetBrains Mono',monospace;">08 · Advanced Functions</p>
+        <h2 class="font-display reveal" style="font-size:clamp(1.8rem,3.6vw,2.7rem);font-weight:700;margin:0 0 1.5rem;background:linear-gradient(135deg,#7c4dff,#b388ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Advanced Functions</h2>
+        <table class="tbl reveal">
+            <thead><tr><th>Function</th><th>Purpose</th><th>Example</th></tr></thead>
+            <tbody>
+                <tr><td><span class="cpill">depth:N</span></td><td style="color:#e8eaf6;">Limit folder nesting depth</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">depth:1 *.ini</td></tr>
+                <tr><td><span class="cpill">parent:</span></td><td style="color:#e8eaf6;">Match specific parent folder name</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">parent:Config</td></tr>
+                <tr><td><span class="cpill">child:</span></td><td style="color:#e8eaf6;">Folder that contains this child</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">child:package.json</td></tr>
+                <tr><td><span class="cpill">empty:</span></td><td style="color:#e8eaf6;">Empty files or empty folders</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">empty:folder:</td></tr>
+                <tr><td><span class="cpill">len:N</span></td><td style="color:#e8eaf6;">Filename length equals N chars</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">len:8 *.exe</td></tr>
+                <tr><td><span class="cpill">count:N</span></td><td style="color:#e8eaf6;">Folders with exactly N children</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">count:0 folder:</td></tr>
+                <tr><td><span class="cpill cpill-v">width:</span> / <span class="cpill cpill-v">height:</span></td><td style="color:#e8eaf6;">Image dimensions in pixels</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">width:&gt;3840</td></tr>
+                <tr><td><span class="cpill cpill-v">bitdepth:</span></td><td style="color:#e8eaf6;">Image bit depth</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">bitdepth:32</td></tr>
+                <tr><td><span class="cpill cpill-g">runcount:N</span></td><td style="color:#e8eaf6;">How many times exe was run</td><td style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">runcount:&gt;100</td></tr>
+            </tbody>
+        </table>
+        <div class="glass-card ac2 reveal" style="margin-top:0.9rem;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:#b388ff;">child:package.json depth:3</div>
+            <div style="font-size:0.74rem;color:#5a6380;margin-top:0.2rem;">Find all Node.js projects within 3 folder levels deep</div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════ SLIDE 10 — DUPLICATE DETECTION ═══════════════════════════════════════ -->
+<div class="slide slide-scrollable" data-slide="10">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:370px;height:370px;top:-85px;right:-75px;background:#ff4d6d;opacity:0.044;"></div>
+        <div class="blob" style="width:250px;height:250px;bottom:-55px;left:-40px;background:#ffb300;opacity:0.033;"></div>
+    </div>
+    <div class="content">
+        <p class="reveal" style="font-size:0.72rem;color:#ff8fa3;text-transform:uppercase;letter-spacing:0.14em;font-weight:600;margin-bottom:0.4rem;font-family:'JetBrains Mono',monospace;">09 · Dedupe</p>
+        <h2 class="font-display reveal" style="font-size:clamp(1.8rem,3.6vw,2.7rem);font-weight:700;margin:0 0 1.5rem;background:linear-gradient(135deg,#ff4d6d,#ff8fa3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Duplicate Detection</h2>
+        <div style="display:flex;flex-direction:column;gap:0.75rem;">
+            <div class="glass-card ac-red reveal">
+                <div style="display:flex;align-items:flex-start;gap:0.9rem;">
+                    <span class="cpill cpill-r" style="white-space:nowrap;">dupe:</span>
+                    <div>
+                        <div style="font-size:0.8rem;color:#e8eaf6;font-weight:600;margin-bottom:0.2rem;">Name + Size + Date match</div>
+                        <div style="font-size:0.76rem;color:#5a6380;">Finds likely duplicates by comparing all three fields simultaneously</div>
+                        <div style="font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:#ff8fa3;margin-top:0.25rem;">image: dupe:</div>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card ac-amber reveal">
+                <div style="display:flex;align-items:flex-start;gap:0.9rem;">
+                    <span class="cpill cpill-a" style="white-space:nowrap;">sizedupe:</span>
+                    <div>
+                        <div style="font-size:0.8rem;color:#e8eaf6;font-weight:600;margin-bottom:0.2rem;">Same size only</div>
+                        <div style="font-size:0.76rem;color:#5a6380;">Catches renamed copies — same byte count, different name/date</div>
+                        <div style="font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:#ffd740;margin-top:0.25rem;">video: sizedupe:</div>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card ac2 reveal">
+                <div style="display:flex;align-items:flex-start;gap:0.9rem;">
+                    <span class="cpill cpill-v" style="white-space:nowrap;">namepartdupe:</span>
+                    <div>
+                        <div style="font-size:0.8rem;color:#e8eaf6;font-weight:600;margin-bottom:0.2rem;">Filename stem matches</div>
+                        <div style="font-size:0.76rem;color:#5a6380;">Finds files with same base name but different extensions or suffixes</div>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card ac1 reveal">
+                <div style="display:flex;align-items:flex-start;gap:0.9rem;">
+                    <span class="cpill" style="white-space:nowrap;">dmdupe:</span>
+                    <div>
+                        <div style="font-size:0.8rem;color:#e8eaf6;font-weight:600;margin-bottom:0.2rem;">Same Date Modified only</div>
+                        <div style="font-size:0.76rem;color:#5a6380;">Useful for finding files that were touched at the same time (batch operations)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════ SLIDE 11 — CONTENT SEARCH & REGEX ═══════════════════════════════════════ -->
+<div class="slide slide-scrollable" data-slide="11">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:370px;height:370px;top:-85px;right:-75px;background:#00b686;opacity:0.044;"></div>
+        <div class="blob" style="width:250px;height:250px;bottom:-55px;left:-40px;background:#00e5ff;opacity:0.033;"></div>
+    </div>
+    <div class="content">
+        <p class="reveal" style="font-size:0.72rem;color:#00b686;text-transform:uppercase;letter-spacing:0.14em;font-weight:600;margin-bottom:0.4rem;font-family:'JetBrains Mono',monospace;">10 · Content &amp; Regex</p>
+        <h2 class="font-display reveal" style="font-size:clamp(1.8rem,3.6vw,2.7rem);font-weight:700;margin:0 0 1.5rem;background:linear-gradient(135deg,#00b686,#69ffda);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Content Search &amp; Regex</h2>
+        <div style="display:flex;flex-direction:column;gap:0.75rem;">
+            <div class="glass-card ac3 reveal">
+                <div style="font-size:0.72rem;color:#00b686;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">📄 content:</div>
+                <div style="font-size:0.79rem;color:#b0b8d4;margin-bottom:0.3rem;">Searches inside file content (text files). Slower than name search — scans disk.</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:#69ffda;">content:"api_key" *.env</div>
+            </div>
+            <div class="glass-card ac3 reveal">
+                <div style="font-size:0.72rem;color:#00b686;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">🔡 utf8content:</div>
+                <div style="font-size:0.79rem;color:#b0b8d4;margin-bottom:0.3rem;">Forces UTF-8 encoding for content search — use for Unicode text files, source code.</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:#69ffda;">utf8content:"TODO" *.ts</div>
+            </div>
+            <div class="glass-card ac1 reveal">
+                <div style="font-size:0.72rem;color:#00e5ff;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">⚙️ regex: in filenames</div>
+                <div style="font-size:0.79rem;color:#b0b8d4;margin-bottom:0.3rem;">Apply full PCRE-style regex against the filename (not content). Instant — no disk scan.</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;color:#00e5ff;">regex:^(2025|2026).*\.pdf$</div>
+                <div style="font-size:0.74rem;color:#5a6380;margin-top:0.2rem;">PDF files that start with 2025 or 2026</div>
+            </div>
+            <div class="glass-card ac-amber reveal">
+                <div style="font-size:0.72rem;color:#ffd740;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.25rem;">⚠️ Performance Note</div>
+                <div style="font-size:0.79rem;color:#b0b8d4;"><strong style="color:#ffd740;">content:</strong> reads every file — very slow on large drives. Always combine with file type or path filter: <span style="font-family:'JetBrains Mono',monospace;color:#69ffda;">path:D:\Projects content:"TODO"</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════ SLIDE 12 — FILTERS, BOOKMARKS & MACROS ═══════════════════════════════════════ -->
+<div class="slide slide-scrollable" data-slide="12">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:370px;height:370px;top:-85px;right:-75px;background:#7c4dff;opacity:0.044;"></div>
+        <div class="blob" style="width:250px;height:250px;bottom:-55px;left:-40px;background:#00e5ff;opacity:0.033;"></div>
+    </div>
+    <div class="content">
+        <p class="reveal" style="font-size:0.72rem;color:#7c4dff;text-transform:uppercase;letter-spacing:0.14em;font-weight:600;margin-bottom:0.4rem;font-family:'JetBrains Mono',monospace;">11 · Productivity</p>
+        <h2 class="font-display reveal" style="font-size:clamp(1.8rem,3.6vw,2.7rem);font-weight:700;margin:0 0 1.5rem;background:linear-gradient(135deg,#7c4dff,#b388ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Filters, Bookmarks &amp; Macros</h2>
+        <div style="display:flex;flex-direction:column;gap:0.8rem;">
+            <div class="glass-card ac2 reveal">
+                <div style="font-size:0.72rem;color:#b388ff;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">🔖 Custom Filters</div>
+                <div style="font-size:0.79rem;color:#b0b8d4;">Create at <strong style="color:#e8eaf6;">Tools → Options → Filters</strong>. Assign a name and a search query. Filter appears in the dropdown left of the search box. Example: <em>UE5 Configs</em> → <span style="font-family:'JetBrains Mono',monospace;color:#7c4dff;">path:EpicGames *.ini</span></div>
+            </div>
+            <div class="glass-card ac1 reveal">
+                <div style="font-size:0.72rem;color:#00e5ff;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">📌 Bookmarks</div>
+                <div style="font-size:0.79rem;color:#b0b8d4;">Save any search as a Bookmark via <strong style="color:#e8eaf6;">Bookmarks → Add Bookmark</strong>. Assign keyboard shortcut. Bookmarks persist across restarts and appear in the Bookmarks menu.</div>
+            </div>
+            <div class="glass-card ac3 reveal">
+                <div style="font-size:0.72rem;color:#00b686;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">⌨️ Search Macros (Aliases)</div>
+                <div style="font-size:0.79rem;color:#b0b8d4;margin-bottom:0.35rem;"><strong style="color:#e8eaf6;">Tools → Options → Search → Macros</strong>. Map a short keyword to a full query template.</div>
+                <div style="display:flex;flex-direction:column;gap:0.2rem;font-family:'JetBrains Mono',monospace;font-size:0.76rem;">
+                    <div><span style="color:#7c4dff;">ini</span> <span style="color:#5a6380;">→</span> <span style="color:#00e5ff;">ext:ini</span></div>
+                    <div><span style="color:#7c4dff;">ue5</span> <span style="color:#5a6380;">→</span> <span style="color:#00e5ff;">path:E:\EpicGames</span></div>
+                    <div><span style="color:#7c4dff;">bigvid</span> <span style="color:#5a6380;">→</span> <span style="color:#00e5ff;">video: size:huge</span></div>
+                </div>
+            </div>
+            <div class="glass-card ac-amber reveal">
+                <div style="font-size:0.72rem;color:#ffd740;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.25rem;">💾 Saved Searches (EFU)</div>
+                <div style="font-size:0.79rem;color:#b0b8d4;">Export any search as <strong style="color:#e8eaf6;">.efu</strong> file (File → Export). EFU = Everything File URL. Can be re-imported, shared, or used as a virtual folder in Everything.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════ SLIDE 13 — CLI & SEARCH COMMANDS ═══════════════════════════════════════ -->
+<div class="slide slide-scrollable" data-slide="13">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:370px;height:370px;top:-85px;right:-75px;background:#00e5ff;opacity:0.044;"></div>
+        <div class="blob" style="width:250px;height:250px;bottom:-55px;left:-40px;background:#7c4dff;opacity:0.033;"></div>
+    </div>
+    <div class="content">
+        <p class="reveal" style="font-size:0.72rem;color:#00e5ff;text-transform:uppercase;letter-spacing:0.14em;font-weight:600;margin-bottom:0.4rem;font-family:'JetBrains Mono',monospace;">12 · CLI &amp; Commands</p>
+        <h2 class="font-display reveal" style="font-size:clamp(1.8rem,3.6vw,2.7rem);font-weight:700;margin:0 0 1.5rem;background:linear-gradient(135deg,#00e5ff,#22eeff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">CLI &amp; Search Commands</h2>
+        <div style="display:flex;flex-direction:column;gap:0.7rem;">
+            <div class="glass-card ac1 reveal">
+                <div style="font-size:0.72rem;color:#00e5ff;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">🖥️ In-App Commands</div>
+                <div style="display:flex;flex-direction:column;gap:0.2rem;font-family:'JetBrains Mono',monospace;font-size:0.77rem;">
+                    <div><span style="color:#00e5ff;">about:config</span> <span style="color:#5a6380;">— open raw config editor</span></div>
+                    <div><span style="color:#00e5ff;">about:rebuild</span> <span style="color:#5a6380;">— force MFT re-index</span></div>
+                    <div><span style="color:#00e5ff;">about:update</span> <span style="color:#5a6380;">— check for updates</span></div>
+                    <div><span style="color:#00e5ff;">/close</span> <span style="color:#5a6380;">— exit app cleanly</span></div>
+                    <div><span style="color:#00e5ff;">/restart</span> <span style="color:#5a6380;">— restart service</span></div>
+                </div>
+            </div>
+            <div class="glass-card ac2 reveal">
+                <div style="font-size:0.72rem;color:#7c4dff;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">💻 Windows CLI (es.exe)</div>
+                <div style="display:flex;flex-direction:column;gap:0.2rem;font-family:'JetBrains Mono',monospace;font-size:0.76rem;">
+                    <div><span style="color:#b388ff;">es.exe "*.ini" -path "EpicGames"</span></div>
+                    <div><span style="color:#b388ff;">es.exe -size -10mb -ext exe</span></div>
+                    <div><span style="color:#b388ff;">es.exe -export-csv output.csv "*.log"</span></div>
+                    <div><span style="color:#5a6380;">-n 20      → limit results to 20</span></div>
+                    <div><span style="color:#5a6380;">-p         → print full paths</span></div>
+                    <div><span style="color:#5a6380;">-r         → regex mode</span></div>
+                </div>
+            </div>
+            <div class="glass-card ac3 reveal">
+                <div style="font-size:0.72rem;color:#00b686;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">📤 Export Formats</div>
+                <div style="font-size:0.79rem;color:#b0b8d4;"><strong style="color:#e8eaf6;">File → Export:</strong> <span class="cpill cpill-g">.efu</span> (Everything URL), <span class="cpill cpill-g">.csv</span>, <span class="cpill cpill-g">.txt</span>. Use CSV with PowerShell / Python for bulk file operations. EFU re-importable as virtual drives.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════ SLIDE 14 — NETWORK & HTTP ═══════════════════════════════════════ -->
+<div class="slide slide-scrollable" data-slide="14">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:370px;height:370px;top:-85px;right:-75px;background:#00b686;opacity:0.044;"></div>
+        <div class="blob" style="width:250px;height:250px;bottom:-55px;left:-40px;background:#00e5ff;opacity:0.033;"></div>
+    </div>
+    <div class="content">
+        <p class="reveal" style="font-size:0.72rem;color:#00b686;text-transform:uppercase;letter-spacing:0.14em;font-weight:600;margin-bottom:0.4rem;font-family:'JetBrains Mono',monospace;">13 · Network &amp; Remote</p>
+        <h2 class="font-display reveal" style="font-size:clamp(1.8rem,3.6vw,2.7rem);font-weight:700;margin:0 0 1.5rem;background:linear-gradient(135deg,#00b686,#69ffda);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Network, HTTP &amp; ETP</h2>
+        <div style="display:flex;flex-direction:column;gap:0.8rem;">
+            <div class="glass-card ac3 reveal">
+                <div style="font-size:0.72rem;color:#00b686;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">🌐 HTTP Server</div>
+                <div style="font-size:0.79rem;color:#b0b8d4;margin-bottom:0.35rem;">Enable at <strong style="color:#e8eaf6;">Tools → Options → HTTP Server</strong>. Set port (default: 80). Access from any browser on LAN: <span style="font-family:'JetBrains Mono',monospace;color:#00b686;">http://192.168.x.x:80</span></div>
+                <div style="font-size:0.76rem;color:#5a6380;">Works from phone, tablet, or other PCs. No app install needed. Supports search + file download links.</div>
+            </div>
+            <div class="glass-card ac1 reveal">
+                <div style="font-size:0.72rem;color:#00e5ff;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">📡 ETP Protocol</div>
+                <div style="font-size:0.79rem;color:#b0b8d4;">Everything Transport Protocol — TCP-based. Lets another PC running Everything connect to your index. Enable at <strong style="color:#e8eaf6;">Options → ETP/FTP Server</strong>. From client PC: <strong style="color:#e8eaf6;">Tools → Connect to ETP Server</strong>.</div>
+            </div>
+            <div class="glass-card ac2 reveal">
+                <div style="font-size:0.72rem;color:#7c4dff;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem;">🗂️ Network Drives (NAS)</div>
+                <div style="font-size:0.79rem;color:#b0b8d4;margin-bottom:0.3rem;">Add UNC paths or mapped drives via <strong style="color:#e8eaf6;">Tools → Options → Indexes</strong>. Everything will index those shares too. Requires read permission on the share.</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:#b388ff;">\\NAS01\Media → added as index</div>
+            </div>
+            <div class="glass-card ac-amber reveal">
+                <div style="font-size:0.72rem;color:#ffd740;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.25rem;">🔐 Security Note</div>
+                <div style="font-size:0.79rem;color:#b0b8d4;">HTTP server exposes <strong style="color:#ffd740;">all indexed file paths</strong> on your network. Set username/password in Options. Never expose port to the internet without auth.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════ SLIDE 15 — POWER RECIPES ═══════════════════════════════════════ -->
+<div class="slide slide-scrollable" data-slide="15">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:370px;height:370px;top:-85px;right:-75px;background:#00e5ff;opacity:0.044;"></div>
+        <div class="blob" style="width:250px;height:250px;bottom:-55px;left:-40px;background:#00b686;opacity:0.033;"></div>
+    </div>
+    <div class="content">
+        <p class="reveal" style="font-size:0.72rem;color:#00e5ff;text-transform:uppercase;letter-spacing:0.14em;font-weight:600;margin-bottom:0.4rem;font-family:'JetBrains Mono',monospace;">14 · Power Recipes</p>
+        <h2 class="font-display reveal" style="font-size:clamp(1.8rem,3.6vw,2.7rem);font-weight:700;margin:0 0 1.5rem;background:linear-gradient(135deg,#00e5ff,#00b686);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Power Search Recipes</h2>
+        <div style="display:flex;flex-direction:column;gap:0.6rem;">
+            <div class="glass-card ac1 reveal">
+                <div style="font-size:0.7rem;color:#5a6380;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">🎮 UE5 .ini Files Across All Drives</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:#00e5ff;">path:Config case:regex:Windows.*Engine\.ini</div>
+            </div>
+            <div class="glass-card ac2 reveal">
+                <div style="font-size:0.7rem;color:#5a6380;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">🗑️ Empty Folders (Cleanup)</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:#b388ff;">empty:folder:</div>
+            </div>
+            <div class="glass-card ac3 reveal">
+                <div style="font-size:0.7rem;color:#5a6380;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">🎬 Large Videos Modified This Month</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:#00b686;">video: size:huge dm:thismonth</div>
+            </div>
+            <div class="glass-card ac-red reveal">
+                <div style="font-size:0.7rem;color:#5a6380;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">🔍 Secret/Hidden Images</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:#ff8fa3;">image: attrib:H !attrib:S</div>
+            </div>
+            <div class="glass-card ac-amber reveal">
+                <div style="font-size:0.7rem;color:#5a6380;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">🗄️ Backup Duplicates on G: Drive</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:#ffd740;">path:G:\ dupe:</div>
+            </div>
+            <div class="glass-card ac3 reveal">
+                <div style="font-size:0.7rem;color:#5a6380;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">🧹 Node Modules (Disk Hogs)</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:#00b686;">folder: wfn:node_modules</div>
+            </div>
+            <div class="glass-card ac1 reveal">
+                <div style="font-size:0.7rem;color:#5a6380;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">📄 Docs from Q1 2026</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:#00e5ff;">doc: dm:2026/01/01..2026/03/31</div>
+            </div>
+            <div class="glass-card ac2 reveal">
+                <div style="font-size:0.7rem;color:#5a6380;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.2rem;">⚙️ Numbered Config Files</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:0.8rem;color:#b388ff;">regex:[Cc]onfig[0-9]+\.ini</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════ SLIDE 16 — SUMMARY ═══════════════════════════════════════ -->
+<div class="slide" data-slide="16">
+    <div class="gradient-mesh">
+        <div class="blob" style="width:500px;height:500px;top:-120px;right:-100px;background:#00e5ff;opacity:0.07;"></div>
+        <div class="blob" style="width:340px;height:340px;bottom:-80px;left:-60px;background:#7c4dff;opacity:0.06;"></div>
+        <div class="blob" style="width:200px;height:200px;top:40%;left:15%;background:#00b686;opacity:0.05;"></div>
+    </div>
+    <canvas class="particle-canvas" style="position:absolute;inset:0;z-index:1;"></canvas>
+    <div class="content text-center">
+        <div style="font-size:72px;animation:float 3s ease-in-out infinite;margin-bottom:1.2rem;filter:drop-shadow(0 0 24px rgba(0,229,255,0.4));">⚡</div>
+        <h2 class="font-display reveal" style="font-size:clamp(2rem,4vw,3.2rem);font-weight:800;background:linear-gradient(135deg,#00e5ff,#7c4dff,#00b686);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:0 0 0.8rem;">You're Now a Power User</h2>
+        <p class="reveal" style="font-size:0.9rem;color:#5a6380;letter-spacing:0.14em;text-transform:uppercase;font-weight:400;margin:0 0 2rem;">16 Techniques · Instant Recall</p>
+        <div class="reveal" style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem;text-align:left;max-width:900px;margin:0 auto;">
+            <div class="glass-card ac1" style="padding:0.8rem;"><div style="font-size:0.68rem;font-weight:700;color:#00e5ff;font-family:'JetBrains Mono',monospace;">Boolean</div><div style="font-size:0.72rem;color:#5a6380;margin-top:0.2rem;">SPACE | ! &lt;&gt; " "</div></div>
+            <div class="glass-card ac1" style="padding:0.8rem;"><div style="font-size:0.68rem;font-weight:700;color:#00e5ff;font-family:'JetBrains Mono',monospace;">Wildcards</div><div style="font-size:0.72rem;color:#5a6380;margin-top:0.2rem;">* ? ** path: wfn:</div></div>
+            <div class="glass-card ac2" style="padding:0.8rem;"><div style="font-size:0.68rem;font-weight:700;color:#7c4dff;font-family:'JetBrains Mono',monospace;">Dates</div><div style="font-size:0.72rem;color:#5a6380;margin-top:0.2rem;">dm: dc: da: today</div></div>
+            <div class="glass-card ac2" style="padding:0.8rem;"><div style="font-size:0.68rem;font-weight:700;color:#7c4dff;font-family:'JetBrains Mono',monospace;">Size</div><div style="font-size:0.72rem;color:#5a6380;margin-top:0.2rem;">size: huge gigantic</div></div>
+            <div class="glass-card ac3" style="padding:0.8rem;"><div style="font-size:0.68rem;font-weight:700;color:#00b686;font-family:'JetBrains Mono',monospace;">Types</div><div style="font-size:0.72rem;color:#5a6380;margin-top:0.2rem;">audio: video: doc:</div></div>
+            <div class="glass-card ac3" style="padding:0.8rem;"><div style="font-size:0.68rem;font-weight:700;color:#00b686;font-family:'JetBrains Mono',monospace;">Advanced</div><div style="font-size:0.72rem;color:#5a6380;margin-top:0.2rem;">depth: child: len:</div></div>
+            <div class="glass-card ac-red" style="padding:0.8rem;"><div style="font-size:0.68rem;font-weight:700;color:#ff8fa3;font-family:'JetBrains Mono',monospace;">Dupes</div><div style="font-size:0.72rem;color:#5a6380;margin-top:0.2rem;">dupe: sizedupe:</div></div>
+            <div class="glass-card ac-amber" style="padding:0.8rem;"><div style="font-size:0.68rem;font-weight:700;color:#ffd740;font-family:'JetBrains Mono',monospace;">Network</div><div style="font-size:0.72rem;color:#5a6380;margin-top:0.2rem;">HTTP · ETP · CLI</div></div>
+        </div>
+        <p class="reveal" style="font-size:0.76rem;color:#5a6380;margin-top:1.5rem;">📖 Full docs: <span style="font-family:'JetBrains Mono',monospace;color:#00e5ff;">voidtools.com/support/everything</span></p>
+    </div>
+</div>
+
+</div><!-- end .deck -->
+
+<!-- NAVIGATION -->
+<div class="nav-controls">
+    <button class="nav-btn" onclick="changeSlide(-1)">&#8249;</button>
+    <div class="slide-dots" id="dots"></div>
+    <button class="nav-btn" onclick="changeSlide(1)">&#8250;</button>
+    <span class="slide-counter" id="counter">1 / 16</span>
+</div>
+
+<script>
+    let current = 1;
+    const total = document.querySelectorAll('.slide').length;
+    const dotsContainer = document.getElementById('dots');
+    const counter = document.getElementById('counter');
+    for (let i = 1; i <= total; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (i === 1 ? ' active' : '');
+        dot.onclick = () => goToSlide(i);
+        dotsContainer.appendChild(dot);
+    }
+    function goToSlide(n) {
+        const prev = document.querySelector('.slide.active');
+        const next = document.querySelector(`.slide[data-slide="${n}"]`);
+        if (prev) prev.classList.remove('active');
+        if (next) { next.classList.add('active'); animateSlide(next); }
+        current = n; updateNav();
+    }
+    function changeSlide(dir) { let next = current + dir; if (next < 1) next = total; if (next > total) next = 1; goToSlide(next); }
+    function updateNav() {
+        document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i + 1 === current));
+        counter.textContent = current + ' / ' + total;
+    }
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); changeSlide(1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); changeSlide(-1); }
+    });
+    let touchStartX = 0;
+    document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+    document.addEventListener('touchend', (e) => { const diff = touchStartX - e.changedTouches[0].clientX; if (Math.abs(diff) > 50) changeSlide(diff > 0 ? 1 : -1); });
+
+    function animateSlide(slide) {
+        slide.querySelectorAll('.reveal').forEach((el, i) => {
+            el.style.transition = 'none';
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.offsetHeight;
+            const delay = i * 0.07;
+            el.style.transition = `opacity 0.32s ease ${delay}s, transform 0.32s ease ${delay}s`;
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0px)';
+        });
+        animateSlideEffects(slide);
+        // Reset scroll on slide-scrollable
+        const c = slide.querySelector('.content');
+        if (c && slide.classList.contains('slide-scrollable')) c.scrollTop = 0;
+    }
+
+    function animateSlideEffects(slide) {
+        slide.querySelectorAll('.bar-fill:not(.fill-init)').forEach((bar, i) => {
+            bar.classList.add('fill-init');
+            bar.style.width = '0%';
+            bar.style.transition = `width 0.9s ease ${i * 0.1}s`;
+            bar.offsetHeight;
+            bar.style.width = bar.dataset.width + '%';
+        });
+    }
+
+    /* === Mouse spotlight === */
+    document.addEventListener('mousemove', (e) => {
+        const spotlight = document.querySelector('.mouse-spotlight');
+        if (spotlight) spotlight.style.background = `radial-gradient(600px circle at ${e.clientX}px ${e.clientY}px, rgba(0,229,255,0.055), transparent 40%)`;
+    });
+
+    /* === Mouse aura (desktop only) === */
+    (function() {
+        const aura = document.getElementById('mouse-aura');
+        if (window.matchMedia('(hover: none)').matches) { aura.style.display = 'none'; return; }
+        let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+        document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+        (function tick() {
+            const isLight = document.body.classList.contains('light-mode');
+            const size   = isLight ? 340 : 220;
+            const alpha1 = isLight ? 0.08 : 0.02;
+            const alpha2 = isLight ? 0.012 : 0.015;
+            aura.style.background =
+                `radial-gradient(${size}px circle at ${mx}px ${my}px,` +
+                `rgba(0,229,255,${alpha1}) 0%,` +
+                `rgba(124,77,255,${alpha2}) 40%,` +
+                `transparent 70%)`;
+            requestAnimationFrame(tick);
+        })();
+    })();
+
+    /* === Particles === */
+    window.initParticles = function(canvas, options) {
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
+        const interactive = options.interactive !== false;
+        const count = options.count || (interactive ? 45 : 16);
+        let mx = -1000, my = -1000;
+        const r = 0, g = 229, b = 255;
+        const particles = Array.from({ length: count }, () => ({
+            x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.25, vy: (Math.random() - 0.5) * 0.25,
+            size: Math.random() * 2.2 + 0.6, alpha: Math.random() * 0.28 + 0.08
+        }));
+        if (interactive) {
+            canvas.addEventListener('mousemove', (e) => { const rect = canvas.getBoundingClientRect(); mx = e.clientX - rect.left; my = e.clientY - rect.top; });
+            canvas.addEventListener('mouseleave', () => { mx = -1000; my = -1000; });
+        }
+        (function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                if (interactive) { const dx = p.x - mx, dy = p.y - my, dist = Math.sqrt(dx * dx + dy * dy); if (dist < 110) { const force = (110 - dist) / 110 * 1.8; p.vx += (dx / dist) * force * 0.08; p.vy += (dy / dist) * force * 0.08; } }
+                p.vx *= 0.98; p.vy *= 0.98; p.x += p.vx; p.y += p.vy;
+                if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0;
+                if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${r},${g},${b},${p.alpha})`; ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        })();
+    };
+    document.querySelectorAll('.particle-canvas').forEach(c => window.initParticles(c, { interactive: true, count: 45 }));
+
+    /* === Theme toggle === */
+    function toggleTheme() {
+        const isLight = document.body.classList.toggle('light-mode');
+        document.getElementById('theme-icon').textContent = isLight ? '🌙' : '☀️';
+    }
+
+    try { animateSlide(document.querySelector('.slide.active')); } catch(e) { console.warn(e); }
+</script>
+</body>
+</html>
