@@ -20,7 +20,9 @@ duplicate detection, network access, and CLI automation - all in one free tool.
 
 <br/>
 
-<img width="100%" alt="preview" src="https://github.com/user-attachments/assets/ee859f17-4053-40bf-861d-243ec67927ba" />
+<a href="https://htmlpreview.github.io/?https://github.com/Olexify/GuideFor---Everything_SearchEngine/blob/main/everything-search-mastery-guide-5.html">
+  <img width="100%" alt="preview" src="https://github.com/user-attachments/assets/ee859f17-4053-40bf-861d-243ec67927ba" />
+</a>
 
 ### 🎓 Interactive Slide Deck
 
